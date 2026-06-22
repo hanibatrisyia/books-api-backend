@@ -87,6 +87,7 @@ return function (App $app): void {
         $origin = $request->getHeaderLine('Origin');
         $allowedOrigins = ['http://localhost:5173', 
                             'http://localhost:4173',
+                            'https://books-frontend-ashen.vercel.app/',
                             'https://books-frontend-ace-code.vercel.app/'
         ];
         
