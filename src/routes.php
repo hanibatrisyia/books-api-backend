@@ -85,7 +85,10 @@ return function (App $app): void {
 
         // Read the incoming origin (could be port 5173 or 4173)
         $origin = $request->getHeaderLine('Origin');
-        $allowedOrigins = ['http://localhost:5173', 'http://localhost:4173'];
+        $allowedOrigins = ['http://localhost:5173', 
+                            'http://localhost:4173',
+                            'https://books-frontend-ace-code.vercel.app/'
+        ];
         
         // If the origin is allowed, use it; otherwise fall back to default dev port
         $allowOrigin = in_array($origin, $allowedOrigins) ? $origin : 'http://localhost:5173';
