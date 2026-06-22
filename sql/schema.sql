@@ -1,8 +1,10 @@
 CREATE DATABASE IF NOT EXISTS books_api 
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
 USE books_api; 
+ 
+ DROP TABLE IF EXISTS books;
+DROP TABLE IF EXISTS users;
 
-DROP TABLE IF EXISTS users; 
 CREATE TABLE users ( 
     id            INT AUTO_INCREMENT PRIMARY KEY, 
     name          VARCHAR(150) NOT NULL, 
@@ -29,8 +31,6 @@ CREATE TABLE IF NOT EXISTS audit_log (
     INDEX idx_action (action), 
     INDEX idx_actor  (actor_id) 
 ) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS books; 
   
 CREATE TABLE books ( 
     id          INT AUTO_INCREMENT PRIMARY KEY, 
