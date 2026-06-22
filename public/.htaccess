@@ -1,3 +1,18 @@
+<IfModule mod_headers.c>
+    # 1. Dynamically match Vercel domain name
+    SetEnvIf Origin "https://books-frontend-ashen.vercel.app/" AccessControlAllowOrigin=$0
+    Header set Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
+    Header set Access-Control-Allow-Headers "X-Requested-With, Content-Type, Accept, Origin, Authorization"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Credentials "true"
+
+    # 2. Instantly respond to preflight OPTIONS requests before they hit Slim
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ - [R=200,L]
+</IfModule>
+
+# 3. Your Original Slim Framework Routing Rules (Keep these intact!)
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
