@@ -88,7 +88,8 @@ return function (App $app): void {
         $allowedOrigins = ['http://localhost:5173', 
                             'http://localhost:4173',
                             'https://books-frontend-ashen.vercel.app',
-                            'https://books-frontend-ace-code.vercel.app'
+                            'https://books-frontend-ace-code.vercel.app',
+                            'https://localhost'
         ];
         
         // If the origin is allowed, use it; otherwise fall back to default dev port
