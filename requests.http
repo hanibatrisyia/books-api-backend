@@ -1,0 +1,111 @@
+### Books REST API — Chapter 11 (JWT auth)
+### Use VS Code "REST Client" or import into Postman.
+###
+### Tip: paste the value of access_token from /auth/login into the
+### @token variable below to get one-click auth on every protected call.
+
+@host  = http://localhost:8000
+@token = paste-the-access_token-here
+
+# ---------------------------------------------------------------
+# 1. Public — anyone can call
+# ---------------------------------------------------------------
+
+### Health
+GET {{host}}/
+
+### List books (public)
+GET {{host}}/api/books
+
+### Show one book (public)
+GET {{host}}/api/books/1
+
+# ---------------------------------------------------------------
+# 2. Register a new user
+# ---------------------------------------------------------------
+
+### Register
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "name":     "Hilang Reader",
+  "email":    "hilang@example.com",
+  "password": "password123"
+}
+
+# ---------------------------------------------------------------
+# 3. Login (returns the JWT)
+# ---------------------------------------------------------------
+
+### Login as the seeded admin
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email":    "admin@books.test",
+  "password": "password"
+}
+
+### Login as the seeded member
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email":    "member@books.test",
+  "password": "password"
+}
+
+# ---------------------------------------------------------------
+# 4. Protected calls — copy access_token above into @token
+# ---------------------------------------------------------------
+
+### Current user
+GET {{host}}/auth/me
+Authorization: Bearer {{token}}
+
+### Create a book (must be authenticated)
+POST {{host}}/api/books
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title":  "Refactoring",
+  "author": "Martin Fowler",
+  "year":   2018,
+  "genre":  "Software Engineering"
+}
+
+### Update a book (member or admin)
+PUT {{host}}/api/books/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "year":  2009,
+  "genre": "Software Craftsmanship"
+}
+
+### Delete a book (admin only — members get 403)
+DELETE {{host}}/api/books/2
+Authorization: Bearer {{token}}
+
+# ---------------------------------------------------------------
+# 5. Negative cases — verify the guards work
+# ---------------------------------------------------------------
+
+### Wrong password (expect 401)
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@books.test", "password": "wrong" }
+
+### Missing token (expect 401)
+POST {{host}}/api/books
+Content-Type: application/json
+
+{ "title": "Should fail", "author": "Nobody", "year": 2024 }
+
+### Tampered token (expect 401)
+GET {{host}}/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.tampered.signature
